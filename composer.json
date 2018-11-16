@@ -1,0 +1,40 @@
+{
+    "name": "silvercommerce/stock",
+    "description": "Module that adds discounts (either as a code, or on a group) to SilverCommerce",
+      "type": "silverstripe-vendormodule",
+      "homepage": "http://github.com/silvercommerce/stock",
+      "keywords": [
+          "silverstripe",
+          "silvercommerce",
+          "commerce",
+          "ecommerce",
+          "stock",
+          "stock management"
+      ],
+      "license": "BSD-3-Clause",
+      "authors": [
+          {
+              "name": "Morven Lewis-Everley",
+              "email": "morven@ilateral.co.uk"
+          },
+          {
+              "name": "Mark Anderson",
+              "email": "mark@ilateral.co.uk"
+          }
+      ],
+      "support": {
+          "issues": "http://github.com/silvercommerce/stock/issues"
+      },
+      "require": {
+          "silverstripe/framework": "~4.0",
+          "silvercommerce/settings": "~1.0",
+          "silvercommerce/orders-admin": "~1.0"
+      },
+      "autoload": {
+          "psr-4": {
+              "SilverCommerce\\Stock\\": "src/",
+              "SilverCommerce\\Stock\\Tests\\": "tests/"
+          }
+      }
+  }
+  

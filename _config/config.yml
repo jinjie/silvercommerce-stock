@@ -1,0 +1,7 @@
+---
+Name: stockconfig
+---
+#Extensions
+SilverCommerce\CatalogueAdmin\Model\CatalogueProduct:
+  extensions:
+    - SilverCommerce\Stock\Extensions\ProductExtension
