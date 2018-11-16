@@ -10,7 +10,7 @@ use SilverStripe\Forms\NumericField;
 class ProductExtension extends DataExtension
 {
     private static $db = [
-        'TrackStock' => 'Boolean',
+        'Stocked' => 'Boolean',
         'StockLevel' => 'Int',
         'LowStock' => 'Int'
     ];
@@ -21,7 +21,7 @@ class ProductExtension extends DataExtension
             'Root.Settings',
             [
                 CheckboxField::create(
-                    'TrackStock'
+                    'Stocked'
                 ),
                 NumericField::create(
                     'StockLevel'
@@ -41,7 +41,7 @@ class ProductExtension extends DataExtension
      */
     public function isStockLow()
     {
-        if ($this->TrackStock) {
+        if ($this->Stocked) {
             return $stock = $this->StockLevel < $this->LowStock ? true : false;
         }
         return true;
@@ -53,10 +53,10 @@ class ProductExtension extends DataExtension
      * @param integer $qty
      * @return boolean
      */    
-    public function hasStock($qty = 0) 
+    public function checkStockLevel($qty = 0) 
     {
-        if ($this->TrackStock) {
-            return $stock = ($this->StockLevel - $qty) >= 0 ? true : false;
+        if ($this->Stocked) {
+            return $this->StockLevel - $qty;
         } 
         return true;
     }
