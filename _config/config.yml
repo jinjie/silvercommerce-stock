@@ -5,6 +5,12 @@ Name: stockconfig
 SilverCommerce\CatalogueAdmin\Model\CatalogueProduct:
   extensions:
     - SilverCommerce\Stock\Extensions\ProductExtension
-SilverCommerce\Checkout\Control\Checkout:
+SilverCommerce\OrdersAdmin\Model\LineItem:
   extensions:
-    - SilverCommerce\Stock\Extensions\CheckoutExtension
+    - SilverCommerce\Stock\Extensions\LineItemExtension
+SilverCommerce\OrdersAdmin\Model\Invoice:
+  extensions:
+    - SilverCommerce\Stock\Extensions\InvoiceExtension
+SilverCommerce\CatalogueAdmin\Admin\CatalogueAdmin:
+  extensions:
+    - SilverCommerce\Stock\Extensions\CatalogueAdminExtension

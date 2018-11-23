@@ -24,8 +24,7 @@ class StockController extends Controller
     public function reduceStock($item, $quantity) 
     {
         $item->StockLevel -= $quantity;
-        if ($item->StockLevel < 0) {
-            $item->StockLevel = 0;
+        if ($item->StockLevel < 0 && $this->email_alerts) {
             $this->alertOversold($item);
         }
         $item->write();
@@ -35,13 +34,16 @@ class StockController extends Controller
         }
     }
 
+    /** ### TO DO ### **/ #################################################################
     public function alertOversold($item) 
     {
         // send email alerting stocklevel mismatch
+        return null;
     }
 
     public function alertLowStock($item) 
     {
         // send email alerting low stock level
+        return null;
     }
 }

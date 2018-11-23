@@ -41,10 +41,10 @@ class ProductExtension extends DataExtension
      */
     public function isStockLow()
     {
-        if ($this->Stocked) {
-            return $stock = $this->StockLevel < $this->LowStock ? true : false;
+        if ($this->owner->Stocked) {
+            return $stock = $this->owner->StockLevel < $this->owner->LowStock ? true : false;
         }
-        return true;
+        return false;
     }
 
     /**
@@ -55,8 +55,8 @@ class ProductExtension extends DataExtension
      */    
     public function checkStockLevel($qty = 0) 
     {
-        if ($this->Stocked) {
-            return $this->StockLevel - $qty;
+        if ($this->owner->Stocked) {
+            return $this->owner->StockLevel - $qty;
         } 
         return true;
     }
