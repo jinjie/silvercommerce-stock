@@ -28,7 +28,8 @@
       "require": {
           "silverstripe/framework": "~4.0",
           "silvercommerce/settings": "~1.0",
-          "silvercommerce/orders-admin": "~1.0"
+          "silvercommerce/orders-admin": "~1.0",
+          "i-lateral/silverstripe-gridfield-addons": "~2.0"
       },
       "autoload": {
           "psr-4": {
