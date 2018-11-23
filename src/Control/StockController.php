@@ -8,6 +8,14 @@ use SilverCommerce\CatalogueAdmin\Model\CatalogueProduct;
 class StockController extends Controller
 {
     /**
+     * set whether or not products can be purchased when they have no stock
+     * default to false
+     *
+     * @var boolean
+     */
+    private static $products_available_nostock = false;
+
+    /**
      * Send email alerts when stock levels are low
      *
      * @var boolean
@@ -21,7 +29,7 @@ class StockController extends Controller
      * @param Int $quantity
      * @return void
      */
-    public function reduceStock($item, $quantity) 
+    public static function reduceStock($item, $quantity) 
     {
         $item->StockLevel -= $quantity;
         if ($item->StockLevel < 0 && $this->email_alerts) {

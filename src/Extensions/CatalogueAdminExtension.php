@@ -16,21 +16,21 @@ class CatalogueAdminExtension extends Extension
         if ($this->owner->modelClass == Product::class && $grid) {
             $config = $grid->getConfig();
             $alerts = [
+                'isStockOut' => [
+                    'comparator' => 'equal',
+                    'patterns' => [
+                        true => [
+                            'status' => 'alert',
+                            'message' => 'Out of stock'
+                        ]
+                    ]
+                ],
                 'isStockLow' => [
                     'comparator' => 'equal',
                     'patterns' => [
                         true => [
                             'status' => 'info',
-                            'message' => 'This product is low on stock'
-                        ]
-                    ]
-                ],
-                'StockLevel' => [
-                    'comparator' => 'lessorequal',
-                    'patterns' => [
-                        0 => [
-                            'status' => 'error',
-                            'message' => 'This product is out of stock'
+                            'message' => 'Low stock level'
                         ]
                     ]
                 ]

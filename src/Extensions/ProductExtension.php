@@ -12,8 +12,14 @@ class ProductExtension extends DataExtension
     private static $db = [
         'Stocked' => 'Boolean',
         'StockLevel' => 'Int',
-        'LowStock' => 'Int'
+        'LowStock' => 'Int',
+        'AvailableOutOfStock' => 'Boolean'
     ];
+
+    public function populateDefaults() 
+    {
+        $this->AvailableOutOfStock = StockController::config()->products_available_nostock;
+    }
 
     public function updateCMSFields(FieldList $fields) 
     {
@@ -29,7 +35,11 @@ class ProductExtension extends DataExtension
                 NumericField::create(
                     'LowStock',
                     'Low Stock Level'
-                )->setRightTitle('used to determine when to highlight the stock level as low')
+                )->setRightTitle('used to determine when to highlight the stock level as low'),
+                CheckboxField::create(
+                    'AvailableOutOfStock',
+                    'This product is still available when out of stock'
+                )
             ]
         );
     }
@@ -43,6 +53,19 @@ class ProductExtension extends DataExtension
     {
         if ($this->owner->Stocked) {
             return $stock = $this->owner->StockLevel < $this->owner->LowStock ? true : false;
+        }
+        return false;
+    }
+
+    /**
+     * check if the prodict is out of stock
+     *
+     * @return boolean
+     */
+    public function isStockOut()
+    {
+        if ($this->owner->Stocked) {
+            return $stock = $this->owner->StockLevel < 1 ? true: false;
         }
         return false;
     }

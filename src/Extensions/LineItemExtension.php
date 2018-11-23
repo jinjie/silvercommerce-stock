@@ -5,6 +5,7 @@ namespace SilverCommerce\Stock\Extensions;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\ValidationException;
 use SilverCommerce\OrdersAdmin\Model\Invoice;
+use SilverCommerce\Stock\Control\StockController;
 
 class LineItemExtension extends DataExtension
 {
@@ -31,8 +32,7 @@ class LineItemExtension extends DataExtension
                     ['title' => $match->Title]
                 ));
             }
-            $match->StockLevel -= $qty;
-            $match->write();
+            StockController::reduceStock($match, $qty);
         }
     }
 }

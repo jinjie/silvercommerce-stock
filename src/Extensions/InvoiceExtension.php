@@ -4,6 +4,7 @@ namespace SilverCommerce\Stock\Extensions;
 
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\ValidationException;
+use SilverCommerce\Stock\Control\StockController;
 
 class InvoiceExtension extends DataExtension
 {
@@ -26,8 +27,7 @@ class InvoiceExtension extends DataExtension
                                 ['title' => $match->Title]
                             ));
                         }
-                        $match->StockLevel -= $item->Quantity;
-                        $match->write();
+                        StockController::reduceStock($match, $item->Quantity);
                     }
                 }
             }
