@@ -4,8 +4,9 @@ namespace SilverCommerce\Stock\Extensions;
 
 use SilverStripe\Forms\FieldList;
 use SilverStripe\ORM\DataExtension;
-use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\NumericField;
+use SilverStripe\Forms\CheckboxField;
+use SilverCommerce\Stock\Control\StockController;
 
 class ProductExtension extends DataExtension
 {
@@ -18,7 +19,8 @@ class ProductExtension extends DataExtension
 
     public function populateDefaults() 
     {
-        $this->AvailableOutOfStock = StockController::config()->products_available_nostock;
+        $this->owner->AvailableOutOfStock = StockController::config()->products_available_nostock;
+        parent::populateDefaults();
     }
 
     public function updateCMSFields(FieldList $fields) 
