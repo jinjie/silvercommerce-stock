@@ -17,8 +17,8 @@ class LineItemExtension extends DataExtension
             $qty = 0;
             $old = 0;
             if (!$this->owner->ID) {
-                $qty = $this->owner->Quantity;    
-            } else if ($this->owner->isChanged('Quantity')) {
+                $qty = $this->owner->Quantity;
+            } elseif ($this->owner->isChanged('Quantity')) {
                 $changed = $this->owner->getChangedFields()['Quantity'];
                 $old = $changed['before'];
                 $new = $changed['after'];

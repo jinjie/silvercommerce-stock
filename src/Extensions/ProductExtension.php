@@ -17,13 +17,13 @@ class ProductExtension extends DataExtension
         'AvailableOutOfStock' => 'Boolean'
     ];
 
-    public function populateDefaults() 
+    public function populateDefaults()
     {
         $this->owner->AvailableOutOfStock = StockController::config()->products_available_nostock;
         parent::populateDefaults();
     }
 
-    public function updateCMSFields(FieldList $fields) 
+    public function updateCMSFields(FieldList $fields)
     {
         $fields->addFieldsToTab(
             'Root.Settings',
@@ -77,12 +77,12 @@ class ProductExtension extends DataExtension
      *
      * @param integer $qty
      * @return boolean
-     */    
-    public function checkStockLevel($qty = 0) 
+     */
+    public function checkStockLevel($qty = 0)
     {
         if ($this->owner->Stocked) {
             return $this->owner->StockLevel - $qty;
-        } 
+        }
         return true;
     }
 }
