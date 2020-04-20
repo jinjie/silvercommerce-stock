@@ -37,7 +37,7 @@ class StockController extends Controller
         }
         $item->write();
 
-        if ($item->StockLevel < $$item->LowStock && $this->email_alerts) {
+        if ($item->StockLevel < $item->LowStock && $this->email_alerts) {
             $this->alertLowStock($item);
         }
     }
