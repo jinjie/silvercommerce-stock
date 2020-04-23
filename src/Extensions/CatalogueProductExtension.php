@@ -4,8 +4,6 @@ namespace SilverCommerce\Stock\Extensions;
 
 use SilverStripe\Forms\FieldList;
 use SilverStripe\ORM\DataExtension;
-use SilverStripe\Forms\NumericField;
-use SilverStripe\Forms\CheckboxField;
 use SilverCommerce\Stock\Control\StockController;
 
 class CatalogueProductExtension extends DataExtension
@@ -17,10 +15,31 @@ class CatalogueProductExtension extends DataExtension
         'AvailableOutOfStock' => 'Boolean'
     ];
 
+    private static $field_labels = [
+        'Stocked' => 'Track Stock?',
+        'StockLevel' => 'Current Stock',
+        'LowStock' => 'Low Stock Limit',
+        'AvailableOutOfStock' => 'Can still be sold when out of stock?'
+    ];
+
     public function populateDefaults()
     {
         $this->owner->AvailableOutOfStock = StockController::config()->products_available_nostock;
         parent::populateDefaults();
+    }
+
+    public function updateSummaryFields(&$fields)
+    {
+        $fields['Stocked'] = $this->getOwner()->fieldLabel('Stocked');
+        $fields['StockLevel'] = $this->getOwner()->fieldLabel('StockLevel');
+    }
+
+    public function updateExportFields(&$fields)
+    {
+        $fields['Stocked'] = 'Stocked';
+        $fields['StockLevel'] = 'StockLevel';
+        $fields['LowStock'] = 'LowStock';
+        $fields['AvailableOutOfStock'] = 'AvailableOutOfStock';
     }
 
     public function updateCMSFields(FieldList $fields)
@@ -28,20 +47,10 @@ class CatalogueProductExtension extends DataExtension
         $fields->addFieldsToTab(
             'Root.Settings',
             [
-                CheckboxField::create(
-                    'Stocked'
-                ),
-                NumericField::create(
-                    'StockLevel'
-                ),
-                NumericField::create(
-                    'LowStock',
-                    'Low Stock Level'
-                )->setRightTitle('used to determine when to highlight the stock level as low'),
-                CheckboxField::create(
-                    'AvailableOutOfStock',
-                    'This product is still available when out of stock'
-                )
+                $fields->dataFieldByName('Stocked'),
+                $fields->dataFieldByName('StockLevel'),
+                $fields->dataFieldByName('LowStock'),
+                $fields->dataFieldByName('AvailableOutOfStock')
             ]
         );
     }
