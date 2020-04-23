@@ -1,12 +1,15 @@
 <?php
 
-namespace SilverCommerce\Stock\Control;
+namespace SilverCommerce\Stock\Helpers;
 
-use SilverStripe\GraphQL\Controller;
 use SilverCommerce\CatalogueAdmin\Model\CatalogueProduct;
+use SilverStripe\Core\Config\Configurable;
+use SilverStripe\Core\Injector\Injectable;
 
-class StockController extends Controller
+class StockController
 {
+    use Injectable, Configurable;
+
     /**
      * set whether or not products can be purchased when they have no stock
      * default to false
@@ -31,25 +34,27 @@ class StockController extends Controller
      */
     public static function reduceStock($item, $quantity)
     {
+        $alerts = self::config()->email_alerts;
         $item->StockLevel -= $quantity;
-        if ($item->StockLevel < 0 && $this->email_alerts) {
-            $this->alertOversold($item);
-        }
         $item->write();
 
-        if ($item->StockLevel < $item->LowStock && $this->email_alerts) {
-            $this->alertLowStock($item);
+        if ($item->StockLevel < 0 && $alerts == true) {
+            self::alertOversold($item);
+        }
+
+        if ($item->StockLevel < $item->LowStock && $alerts == true) {
+            self::alertLowStock($item);
         }
     }
 
     /** ### TO DO ### **/ #################################################################
-    public function alertOversold($item)
+    public static function alertOversold($item)
     {
         // send email alerting stocklevel mismatch
         return null;
     }
 
-    public function alertLowStock($item)
+    public static function alertLowStock($item)
     {
         // send email alerting low stock level
         return null;

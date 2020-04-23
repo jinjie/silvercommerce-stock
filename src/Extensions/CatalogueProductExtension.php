@@ -84,14 +84,17 @@ class CatalogueProductExtension extends DataExtension
     /**
      * Check if the product has enough stock
      *
-     * @param integer $qty
-     * @return boolean
+     * @param int $qty
+     *
+     * @return int
      */
     public function checkStockLevel($qty = 0)
     {
         if ($this->owner->Stocked) {
             return $this->owner->StockLevel - $qty;
         }
-        return true;
+
+        // If stock tracking is disabled, always report some stock
+        return 1;
     }
 }

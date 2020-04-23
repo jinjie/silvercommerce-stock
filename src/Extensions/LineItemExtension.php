@@ -5,7 +5,7 @@ namespace SilverCommerce\Stock\Extensions;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\ValidationException;
 use SilverCommerce\OrdersAdmin\Model\Invoice;
-use SilverCommerce\Stock\Control\StockController;
+use SilverCommerce\Stock\Helpers\StockController;
 
 class LineItemExtension extends DataExtension
 {
