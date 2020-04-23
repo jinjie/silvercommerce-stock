@@ -8,7 +8,7 @@ use SilverStripe\Forms\NumericField;
 use SilverStripe\Forms\CheckboxField;
 use SilverCommerce\Stock\Control\StockController;
 
-class ProductExtension extends DataExtension
+class CatalogueProductExtension extends DataExtension
 {
     private static $db = [
         'Stocked' => 'Boolean',
