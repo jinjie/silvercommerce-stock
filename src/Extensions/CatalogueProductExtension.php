@@ -4,7 +4,7 @@ namespace SilverCommerce\Stock\Extensions;
 
 use SilverStripe\Forms\FieldList;
 use SilverStripe\ORM\DataExtension;
-use SilverCommerce\Stock\Control\StockController;
+use SilverCommerce\Stock\Helpers\StockController;
 
 class CatalogueProductExtension extends DataExtension
 {

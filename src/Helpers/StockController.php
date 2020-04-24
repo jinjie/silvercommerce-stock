@@ -4,11 +4,12 @@ namespace SilverCommerce\Stock\Helpers;
 
 use SilverCommerce\CatalogueAdmin\Model\CatalogueProduct;
 use SilverStripe\Core\Config\Configurable;
+use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Injector\Injectable;
 
 class StockController
 {
-    use Injectable, Configurable;
+    use Injectable, Configurable, Extensible;
 
     /**
      * set whether or not products can be purchased when they have no stock
