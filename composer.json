@@ -32,6 +32,11 @@
           "silvercommerce/orders-admin": "~1.0",
           "i-lateral/silverstripe-gridfield-addons": "~2.0"
       },
+      "extra": {
+        "expose": [
+            "client"
+        ]
+      },
       "autoload": {
           "psr-4": {
               "SilverCommerce\\Stock\\": "src/",
