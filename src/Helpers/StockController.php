@@ -2,62 +2,149 @@
 
 namespace SilverCommerce\Stock\Helpers;
 
-use SilverCommerce\CatalogueAdmin\Model\CatalogueProduct;
-use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Extensible;
+use SilverStripe\Control\Email\Email;
+use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Injector\Injectable;
+use SilverCommerce\CatalogueAdmin\Model\CatalogueProduct;
 
 class StockController
 {
     use Injectable, Configurable, Extensible;
 
     /**
-     * set whether or not products can be purchased when they have no stock
-     * default to false
+     * Default setting for if products are out of stock
      *
      * @var boolean
      */
     private static $products_available_nostock = false;
 
     /**
-     * Send email alerts when stock levels are low
+     * List of addresses to send email alerts to when stock levels are low
      *
-     * @var boolean
+     * @var array
      */
-    protected $email_alerts = false;
+    private static $send_alerts_to = [];
 
     /**
      * Handle the reduction of of a products stock level
      *
      * @param CatalogueProduct $item
      * @param Int $quantity
+     *
      * @return void
      */
-    public static function reduceStock($item, $quantity)
+    public static function reduceStock(CatalogueProduct $item, $quantity)
     {
-        $alerts = self::config()->email_alerts;
         $item->StockLevel -= $quantity;
         $item->write();
 
-        if ($item->StockLevel < 0 && $alerts == true) {
+        // if alerts are disabled, finish
+        if (!self::sendAlertEmail()) {
+            return;
+        }
+
+        if ($item->isStockOver()) {
             self::alertOversold($item);
         }
 
-        if ($item->StockLevel < $item->LowStock && $alerts == true) {
+        if ($item->isStockOut()) {
+            self::alertOutOfStock($item);
+        }
+
+        if ($item->isStockLow()) {
             self::alertLowStock($item);
         }
     }
 
-    /** ### TO DO ### **/ #################################################################
-    public static function alertOversold($item)
+    /**
+     * Should we send stock alert emails to users?
+     *
+     * @return boolean
+     */
+    public static function sendAlertEmail()
     {
-        // send email alerting stocklevel mismatch
-        return null;
+        $alerts = self::config()->send_alerts_to;
+
+        return count($alerts) > 0;
     }
 
-    public static function alertLowStock($item)
+    /**
+     * Send an oversold alert email when negative stock is set
+     *
+     * @param CatalogueProduct $item
+     *
+     * @return boolean
+     */
+    public static function alertOversold(CatalogueProduct $item)
     {
-        // send email alerting low stock level
-        return null;
+        return self::sendEmails(
+            'SilverCommerce\\Stock\\Email\\OverSoldEmail',
+            _t(__CLASS__ . '.OverSoldSubject', "Product Over Sold"),
+            $item
+        );
+    }
+
+    /**
+     * Send an out of stock alert email when stock is set to 0
+     *
+     * @param CatalogueProduct $item
+     *
+     * @return boolean
+     */
+    public static function alertOutOfStock(CatalogueProduct $item)
+    {
+        return self::sendEmails(
+            'SilverCommerce\\Stock\\Email\\OutOfStockEmail',
+            _t(__CLASS__ . '.OutOfStockSubject', "Product Out Of Stock"),
+            $item
+        );
+    }
+
+    /**
+     * Send a low stock email when stock threshhold is reached
+     *
+     * @param CatalogueProduct $item
+     *
+     * @return boolean
+     */
+    public static function alertLowStock(CatalogueProduct $item)
+    {
+        return self::sendEmails(
+            'SilverCommerce\\Stock\\Email\\LowStockEmail',
+            _t(__CLASS__ . '.LowStockSubject', "Product Low In Stock"),
+            $item
+        );
+    }
+
+    /**
+     * Send alert emails to the configured email addresses
+     *
+     * @param string $template  Name of the email template to use
+     * @param string $subject   The email subject to use
+     * @param CatallogueProduct The current product with low stock
+     *
+     * @return boolean
+     */
+    protected static function sendEmails(string $template, string $subject, CatalogueProduct $item)
+    {
+        $emails = self::config()->send_alerts_to;
+        $success = true;
+
+        foreach ($emails as $address) {
+            $email = Email::create()
+                ->setHTMLTemplate($template)
+                ->setData(['Product' => $item])
+                ->setTo($address)
+                ->setSubject($subject);
+    
+            $sent = $email->send();
+
+            if (!$sent && $success) {
+                $success = false;
+            }
+        }
+
+        return $success;
     }
 }

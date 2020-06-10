@@ -68,8 +68,8 @@ class CatalogueProductExtension extends DataExtension
         }
 
         // Else check current stock against allowed threshold
-        if ($this->owner->Stocked) {
-            return $this->owner->StockLevel < $this->owner->LowStock ? true : false;
+        if ($this->getOwner()->Stocked) {
+            return $this->getOwner()->StockLevel < $this->getOwner()->LowStock ? true : false;
         }
         return false;
     }
@@ -81,11 +81,30 @@ class CatalogueProductExtension extends DataExtension
      */
     public function isStockOut()
     {
-        if ($this->owner->Stocked) {
-            return $this->owner->StockLevel < 1 ? true: false;
+        // If under stocked, don't raise another error
+        if ($this->isStockOver()) {
+            return false;
+        }
+
+        if ($this->getOwner()->Stocked) {
+            return $this->getOwner()->StockLevel < 1 ? true: false;
         }
         return false;
     }
+
+    /**
+     * check if the prodict is over sold (has negative stock)
+     *
+     * @return boolean
+     */
+    public function isStockOver()
+    {
+        if ($this->getOwner()->Stocked) {
+            return $this->getOwner()->StockLevel < 0 ? true: false;
+        }
+        return false;
+    }
+
 
     /**
      * Check if the product has enough stock
@@ -96,8 +115,8 @@ class CatalogueProductExtension extends DataExtension
      */
     public function checkStockLevel($qty = 0)
     {
-        if ($this->owner->Stocked) {
-            return $this->owner->StockLevel - $qty;
+        if ($this->getOwner()->Stocked) {
+            return $this->getOwner()->StockLevel - $qty;
         }
 
         // If stock tracking is disabled, always report some stock
