@@ -62,8 +62,14 @@ class CatalogueProductExtension extends DataExtension
      */
     public function isStockLow()
     {
+        // If out of stock, don't raise another error
+        if ($this->isStockOut()) {
+            return false;
+        }
+
+        // Else check current stock against allowed threshold
         if ($this->owner->Stocked) {
-            return $stock = $this->owner->StockLevel < $this->owner->LowStock ? true : false;
+            return $this->owner->StockLevel < $this->owner->LowStock ? true : false;
         }
         return false;
     }
@@ -76,7 +82,7 @@ class CatalogueProductExtension extends DataExtension
     public function isStockOut()
     {
         if ($this->owner->Stocked) {
-            return $stock = $this->owner->StockLevel < 1 ? true: false;
+            return $this->owner->StockLevel < 1 ? true: false;
         }
         return false;
     }

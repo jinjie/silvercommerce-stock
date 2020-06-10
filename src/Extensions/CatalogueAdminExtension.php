@@ -2,7 +2,7 @@
 
 namespace SilverCommerce\Stock\Extensions;
 
-use Product;
+use SilverCommerce\CatalogueAdmin\Model\CatalogueProduct;
 use SilverStripe\Core\Extension;
 use SilverStripe\GridFieldAddOns\GridFieldRecordHighlighter;
 
@@ -11,9 +11,9 @@ class CatalogueAdminExtension extends Extension
     public function updateEditForm($form)
     {
         $fields = $form->Fields();
-        $grid = $fields
-        ->fieldByName($this->sanitiseClassName($this->owner->modelClass));
-        if ($this->owner->modelClass == Product::class && $grid) {
+        $grid = $fields->fieldByName($this->sanitiseClassName($this->owner->modelClass));
+
+        if ($this->owner->modelClass == CatalogueProduct::class && !empty($grid)) {
             $config = $grid->getConfig();
             $alerts = [
                 'isStockOut' => [
