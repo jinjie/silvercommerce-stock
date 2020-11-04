@@ -44,13 +44,23 @@ class CatalogueProductExtension extends DataExtension
 
     public function updateCMSFields(FieldList $fields)
     {
+        /** @var \SilverCommerce\CatalogueAdmin\Model\CatalogueProduct */
+        $owner = $this->getOwner();
+
+        $fields->removeByName([
+            'Stocked',
+            'StockLevel',
+            'LowStock',
+            'AvailableOutOfStock'
+        ]);
+
         $fields->addFieldsToTab(
             'Root.Settings',
             [
-                $fields->dataFieldByName('Stocked'),
-                $fields->dataFieldByName('StockLevel'),
-                $fields->dataFieldByName('LowStock'),
-                $fields->dataFieldByName('AvailableOutOfStock')
+                $owner->dbObject('Stocked')->scaffoldFormField(),
+                $owner->dbObject('StockLevel')->scaffoldFormField(),
+                $owner->dbObject('LowStock')->scaffoldFormField(),
+                $owner->dbObject('AvailableOutOfStock')->scaffoldFormField()
             ]
         );
     }
