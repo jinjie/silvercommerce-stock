@@ -22,7 +22,7 @@ class AddToCartFormExtension extends Extension
                         'Quantity',
                         LiteralField::create(
                             'StockLevel',
-                            '<p><small>'._t('SilverCommerce\Stock.INSTOCK', '{count} items in stock.', [ 'count' => $product->StockLevel ]).'</small></p>'
+                            $product->renderWIth('SilverCommerce\Stock\Includes\InStockNotice')
                         )
                     );
                 } else {
@@ -31,7 +31,7 @@ class AddToCartFormExtension extends Extension
                     $fields->push(
                         LiteralField::create(
                             'OutOfStock',
-                            '<div class="alert alert-info"><p>'._t('SilverCommerce\Stock.OUTOFSTOCK', 'Sorry, this item is out of stock').'</p></div>'
+                            $product->renderWIth('SilverCommerce\Stock\Includes\OutOfStockNotice')
                         )
                     );
                 }
