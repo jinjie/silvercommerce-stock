@@ -29,7 +29,7 @@
           "silverstripe/framework": "~4.0",
           "silvercommerce/settings": "~1.0",
           "silvercommerce/catalogue-admin": "~1.3",
-          "silvercommerce/orders-admin": "~1.0",
+          "silvercommerce/orders-admin": "^1.5",
           "i-lateral/silverstripe-gridfield-addons": "~2.0"
       },
       "extra": {
